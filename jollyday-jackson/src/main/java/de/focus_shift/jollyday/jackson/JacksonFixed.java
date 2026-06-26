@@ -11,10 +11,7 @@ import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * see {@link FixedHolidayConfiguration}
- */
-class JacksonFixed implements FixedHolidayConfiguration {
+class JacksonFixed extends AbstractJacksonHolidayConfiguration implements FixedHolidayConfiguration {
 
   private final Fixed fixed;
 
@@ -22,79 +19,36 @@ class JacksonFixed implements FixedHolidayConfiguration {
     this.fixed = fixed;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull MonthDay day() {
     return MonthDay.of(Month.valueOf(fixed.getMonth().value()), fixed.getDay());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull String descriptionPropertiesKey() {
     return fixed.getDescriptionPropertiesKey();
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull HolidayType holidayType() {
-    return fixed.getLocalizedType() == null
-      ? HolidayType.PUBLIC_HOLIDAY
-      : HolidayType.valueOf(fixed.getLocalizedType().name());
+    return mapHolidayType(fixed.getLocalizedType());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull Optional<Year> validFrom() {
-    return fixed.getValidFrom() == null
-      ? Optional.empty()
-      : Optional.of(Year.of(fixed.getValidFrom()));
+    return mapToYear(fixed.getValidFrom());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull Optional<Year> validTo() {
-    return fixed.getValidTo() == null
-      ? Optional.empty()
-      : Optional.of(Year.of(fixed.getValidTo()));
+    return mapToYear(fixed.getValidTo());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull YearCycle cycle() {
-    return fixed.getEvery() == null
-      ? YearCycle.EVERY_YEAR
-      : YearCycle.valueOf(fixed.getEvery().name());
+    return mapCycle(fixed.getEvery() , YearCycle.class);
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull List<MovingCondition> conditions() {
     return fixed.getMovingCondition().stream()
