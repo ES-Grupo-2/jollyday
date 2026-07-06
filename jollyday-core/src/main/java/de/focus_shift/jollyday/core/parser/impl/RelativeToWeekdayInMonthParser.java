@@ -42,7 +42,7 @@ public class RelativeToWeekdayInMonthParser implements HolidayParser {
 
     final int currentDayValue = baseDate.getDayOfWeek().getValue();
     final int targetDayValue = rwm.weekday().getValue();
-    final int direction = (rwm.when() == BEFORE ? -1 : 1);
+    final int direction = rwm.when() == BEFORE ? -1 : 1;
 
     int daysDifference = targetDayValue - currentDayValue;
     if (direction < 0 && daysDifference >= 0) {

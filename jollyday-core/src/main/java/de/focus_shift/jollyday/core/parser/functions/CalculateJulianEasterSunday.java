@@ -21,6 +21,6 @@ public class CalculateJulianEasterSunday implements Function<Year, LocalDate> {
     x = d + e + 114;
     month = x / 31;
     day = (x % 31) + 1;
-    return LocalDate.from(JulianChronology.INSTANCE.date(year.getValue(), (month == 3 ? 3 : 4), day));
+    return LocalDate.from(JulianChronology.INSTANCE.date(year.getValue(), month == 3 ? 3 : 4, day));
   }
 }

@@ -64,7 +64,7 @@ public class RelativeToFixedParser implements HolidayParser {
 
   private @NonNull LocalDate moveToWeekday(@NonNull final LocalDate date, @NonNull final DayOfWeek targetDay, @Nullable final Relation relation) {
 
-    final int direction = (relation == BEFORE ? -1 : 1);
+    final int direction = relation == BEFORE ? -1 : 1;
     final int currentDayValue = date.getDayOfWeek().getValue();
     final int targetDayValue = targetDay.getValue();
 
