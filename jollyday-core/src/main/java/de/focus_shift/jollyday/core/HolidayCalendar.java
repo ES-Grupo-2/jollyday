@@ -59,7 +59,7 @@ public enum HolidayCalendar {
    * @return Set of supported calendar codes.
    */
   public static @NonNull Set<String> getSupportedCalendarCodes() {
-    return stream(HolidayCalendar.values())
+    return stream(values())
       .map(HolidayCalendar::getId)
       .collect(toUnmodifiableSet());
   }
