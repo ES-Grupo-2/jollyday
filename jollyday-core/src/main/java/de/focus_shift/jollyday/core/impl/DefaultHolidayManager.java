@@ -201,7 +201,7 @@ public class DefaultHolidayManager extends HolidayManager {
     getParsers(config).stream()
       .map(holidayParser -> holidayParser.parse(year, config))
       .flatMap(Collection::stream)
-      .collect(Collectors.toCollection(() -> holidays));
+      .forEach(holidays::add);
   }
 
   /**
