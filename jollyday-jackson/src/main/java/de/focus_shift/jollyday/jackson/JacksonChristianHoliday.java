@@ -13,10 +13,7 @@ import java.time.chrono.IsoChronology;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * see {@link ChristianHolidayConfiguration}
- */
-class JacksonChristianHoliday implements ChristianHolidayConfiguration {
+class JacksonChristianHoliday extends AbstractJacksonHolidayConfiguration implements ChristianHolidayConfiguration {
 
   private final ChristianHoliday christianHoliday;
 
@@ -24,21 +21,11 @@ class JacksonChristianHoliday implements ChristianHolidayConfiguration {
     this.christianHoliday = christianHoliday;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull ChristianHolidayType type() {
     return ChristianHolidayType.valueOf(christianHoliday.getType().name());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull Chronology chronology() {
     return christianHoliday.getChronology() == ChronologyType.JULIAN
@@ -46,71 +33,31 @@ class JacksonChristianHoliday implements ChristianHolidayConfiguration {
       : IsoChronology.INSTANCE;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull String descriptionPropertiesKey() {
-    return christianHoliday.getDescriptionPropertiesKey() == null
-      ? descriptionPropertiesKeyPrefix() + descriptionPropertiesKeyPrefixSeparator() + type()
-      : christianHoliday.getDescriptionPropertiesKey();
+    return mapDescriptionKey(christianHoliday.getDescriptionPropertiesKey(), descriptionPropertiesKeyPrefix(), descriptionPropertiesKeyPrefixSeparator(), type());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull HolidayType holidayType() {
-    return christianHoliday.getLocalizedType() == null
-      ? HolidayType.PUBLIC_HOLIDAY
-      : HolidayType.valueOf(christianHoliday.getLocalizedType().name());
+    return mapHolidayType(christianHoliday.getLocalizedType());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull Optional<Year> validFrom() {
-    return christianHoliday.getValidFrom() == null
-      ? Optional.empty()
-      : Optional.of(Year.of(christianHoliday.getValidFrom()));
+    return mapToYear(christianHoliday.getValidFrom());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull Optional<Year> validTo() {
-    return christianHoliday.getValidTo() == null
-      ? Optional.empty()
-      : Optional.of(Year.of(christianHoliday.getValidTo()));
+    return mapToYear(christianHoliday.getValidTo());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull YearCycle cycle() {
-    return christianHoliday.getEvery() == null
-      ? YearCycle.EVERY_YEAR
-      : YearCycle.valueOf(christianHoliday.getEvery().name());
+    return mapCycle(christianHoliday.getEvery() , YearCycle.class);
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull List<MovingCondition> conditions() {
     return christianHoliday.getMovingCondition().stream()

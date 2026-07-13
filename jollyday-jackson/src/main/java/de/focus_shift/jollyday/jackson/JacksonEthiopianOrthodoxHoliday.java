@@ -8,10 +8,7 @@ import org.jspecify.annotations.NonNull;
 import java.time.Year;
 import java.util.Optional;
 
-/**
- * see {@link EthiopianOrthodoxHolidayConfiguration}
- */
-class JacksonEthiopianOrthodoxHoliday implements EthiopianOrthodoxHolidayConfiguration {
+class JacksonEthiopianOrthodoxHoliday extends AbstractJacksonHolidayConfiguration implements EthiopianOrthodoxHolidayConfiguration {
 
   private final EthiopianOrthodoxHoliday ethiopianOrthodoxHoliday;
 
@@ -19,73 +16,33 @@ class JacksonEthiopianOrthodoxHoliday implements EthiopianOrthodoxHolidayConfigu
     this.ethiopianOrthodoxHoliday = ethiopianOrthodoxHoliday;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull String descriptionPropertiesKey() {
-    return ethiopianOrthodoxHoliday.getDescriptionPropertiesKey() == null
-      ? descriptionPropertiesKeyPrefix() + descriptionPropertiesKeyPrefixSeparator() + type()
-      : ethiopianOrthodoxHoliday.getDescriptionPropertiesKey();
+    return mapDescriptionKey(ethiopianOrthodoxHoliday.getDescriptionPropertiesKey(), descriptionPropertiesKeyPrefix(), descriptionPropertiesKeyPrefixSeparator(), type());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull HolidayType holidayType() {
-    return ethiopianOrthodoxHoliday.getLocalizedType() == null
-      ? HolidayType.PUBLIC_HOLIDAY
-      : HolidayType.valueOf(ethiopianOrthodoxHoliday.getLocalizedType().name());
+    return mapHolidayType(ethiopianOrthodoxHoliday.getLocalizedType());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull EthiopianOrthodoxHolidayType type() {
     return EthiopianOrthodoxHolidayType.valueOf(ethiopianOrthodoxHoliday.getType().name());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull Optional<Year> validFrom() {
-    return ethiopianOrthodoxHoliday.getValidFrom() == null
-      ? Optional.empty()
-      : Optional.of(Year.of(ethiopianOrthodoxHoliday.getValidFrom()));
+    return mapToYear(ethiopianOrthodoxHoliday.getValidFrom());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull Optional<Year> validTo() {
-    return ethiopianOrthodoxHoliday.getValidTo() == null
-      ? Optional.empty()
-      : Optional.of(Year.of(ethiopianOrthodoxHoliday.getValidTo()));
+    return mapToYear(ethiopianOrthodoxHoliday.getValidTo());
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @return {@inheritDoc}
-   */
   @Override
   public @NonNull YearCycle cycle() {
-    return ethiopianOrthodoxHoliday.getEvery() == null
-      ? YearCycle.EVERY_YEAR
-      : YearCycle.valueOf(ethiopianOrthodoxHoliday.getEvery().name());
+    return mapCycle(ethiopianOrthodoxHoliday.getEvery(), YearCycle.class);
   }
 }
