@@ -42,11 +42,11 @@ public class ValidCycle implements Predicate<Limited> {
   private boolean isValidWithReferenceYear(@NonNull final Limited limited, @NonNull final Period cycleYears) {
     final Optional<Year> validFrom = limited.validFrom();
     if (validFrom.isPresent()) {
-      return (year.minusYears(validFrom.get().getValue())).getValue() % cycleYears.getYears() == 0;
+      return year.minusYears(validFrom.get().getValue()).getValue() % cycleYears.getYears() == 0;
     } else {
       final Optional<Year> validTo = limited.validTo();
       if (validTo.isPresent()) {
-        return (validTo.get().minusYears(year.getValue())).getValue() % cycleYears.getYears() == 0;
+        return validTo.get().minusYears(year.getValue()).getValue() % cycleYears.getYears() == 0;
       }
     }
 

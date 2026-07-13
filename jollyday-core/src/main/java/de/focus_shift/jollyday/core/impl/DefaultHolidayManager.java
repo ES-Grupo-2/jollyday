@@ -27,12 +27,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import static de.focus_shift.jollyday.core.util.ClassLoadingUtil.loadClass;
-import static java.util.Arrays.copyOfRange;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toSet;
-import static java.util.stream.Collectors.toUnmodifiableSet;
-import static java.util.stream.IntStream.rangeClosed;
+import de.focus_shift.jollyday.core.util.ClassLoadingUtil;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 /**
  * Manager implementation for reading data from the configuration datasource.
@@ -119,7 +118,7 @@ public class DefaultHolidayManager extends HolidayManager {
   public @NonNull Set<Holiday> getHolidays(@NonNull final Year year, @NonNull final HolidayType holidayType, @NonNull final String... args) {
     return getHolidays(year, args).stream()
       .filter(holiday -> holiday.getType().equals(holidayType))
-      .collect(toSet());
+      .collect(Collectors.toSet());
   }
 
   /**
@@ -134,12 +133,12 @@ public class DefaultHolidayManager extends HolidayManager {
     Objects.requireNonNull(startDateInclusive, "startDateInclusive is null");
     Objects.requireNonNull(endDateInclusive, "endDateInclusive is null");
 
-    return rangeClosed(startDateInclusive.getYear(), endDateInclusive.getYear())
+    return IntStream.rangeClosed(startDateInclusive.getYear(), endDateInclusive.getYear())
       .mapToObj(Year::of)
       .map(year -> getHolidays(year, args))
       .flatMap(Collection::stream)
       .filter(holiday -> !startDateInclusive.isAfter(holiday.getDate()) && !endDateInclusive.isBefore(holiday.getDate()))
-      .collect(toUnmodifiableSet());
+      .collect(Collectors.toUnmodifiableSet());
   }
 
   /**
@@ -149,7 +148,7 @@ public class DefaultHolidayManager extends HolidayManager {
   public @NonNull Set<Holiday> getHolidays(@NonNull final LocalDate startDateInclusive, @NonNull final LocalDate endDateInclusive, @NonNull final HolidayType holidayType, @NonNull final String... args) {
     return getHolidays(startDateInclusive, endDateInclusive, args).stream()
       .filter(holiday -> holiday.getType().equals(holidayType))
-      .collect(toSet());
+      .collect(Collectors.toSet());
   }
 
   /**
@@ -186,7 +185,7 @@ public class DefaultHolidayManager extends HolidayManager {
 
       configuration.subConfigurations()
         .filter(sub -> hierarchy.equalsIgnoreCase(sub.hierarchy()))
-        .forEach(config -> getHolidays(year, config, holidaySet, copyOfRange(args, 1, args.length))
+        .forEach(config -> getHolidays(year, config, holidaySet, Arrays.copyOfRange(args, 1, args.length))
         );
     }
   }
@@ -202,7 +201,7 @@ public class DefaultHolidayManager extends HolidayManager {
     getParsers(config).stream()
       .map(holidayParser -> holidayParser.parse(year, config))
       .flatMap(Collection::stream)
-      .collect(toCollection(() -> holidays));
+      .forEach(holidays::add);
   }
 
   /**
@@ -243,7 +242,7 @@ public class DefaultHolidayManager extends HolidayManager {
       public @NonNull HolidayParser createValue() {
         final String parserClassName = getManagerParameter().getParserImplClassName(className);
         try {
-          return (HolidayParser) loadClass(parserClassName).getConstructor().newInstance();
+          return (HolidayParser) ClassLoadingUtil.loadClass(parserClassName).getConstructor().newInstance();
         } catch (ReflectiveOperationException | SecurityException e) {
           throw new IllegalStateException("Cannot create parsers.", e);
         }

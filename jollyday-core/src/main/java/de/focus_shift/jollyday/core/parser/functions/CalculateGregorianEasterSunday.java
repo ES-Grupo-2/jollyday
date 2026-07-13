@@ -30,6 +30,6 @@ public class CalculateGregorianEasterSunday implements Function<Year, LocalDate>
     x = h + k - 7 * l + 114;
     month = x / 31;
     day = (x % 31) + 1;
-    return LocalDate.of(year.getValue(), (month == 3 ? MARCH : APRIL), day);
+    return LocalDate.of(year.getValue(), month == 3 ? MARCH : APRIL, day);
   }
 }

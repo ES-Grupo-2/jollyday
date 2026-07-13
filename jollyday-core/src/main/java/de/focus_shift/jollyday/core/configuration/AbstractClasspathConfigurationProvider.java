@@ -36,7 +36,7 @@ abstract class AbstractClasspathConfigurationProvider implements ConfigurationPr
 
   private @NonNull Properties toProperties(final URL propertiesFile) {
     final Properties props = new Properties();
-    try (final InputStream inputStream = propertiesFile.openStream()) {
+    try (InputStream inputStream = propertiesFile.openStream()) {
       props.load(inputStream);
     } catch (IOException e) {
       throw new IllegalStateException("Could not load default configuration from classpath.", e);

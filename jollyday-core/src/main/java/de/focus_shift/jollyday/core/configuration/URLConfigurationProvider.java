@@ -54,7 +54,7 @@ class URLConfigurationProvider implements ConfigurationProvider {
   }
 
   private void readPropertiesFromURL(@NonNull final Properties properties, @NonNull final URL url) {
-    try (final InputStream inputStream = url.openStream()) {
+    try (InputStream inputStream = url.openStream()) {
       properties.load(inputStream);
     } catch (IOException e) {
       throw new IllegalStateException("Could not load property from '" + url + "'.", e);
